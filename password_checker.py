@@ -1,6 +1,9 @@
 import sys
 import requests
 import hashlib
+import pathlib
+import re
+
 
 def request_api_data(query_char):
     '''
@@ -56,23 +59,60 @@ def pwnd_api_check(password):
     sha1password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
     first5_char, tail = sha1password[:5], sha1password[5:]
     response = request_api_data(first5_char)
-    print(first5_char)
-    print(tail)
     count = get_password_leaks_count(response, tail)
 
     return count
 
 
+def password_from_txt_file(txt_file):
+    '''
+        Takes in a .txt file and opens the file
+        Extracts the passwords strings from the file
+        Returns a list of passwords 
+    '''
+    password_list = []
 
+    try:
+        with open(txt_file, mode='r') as open_file:
+            lines = open_file.readlines()
+            for line in lines:
+                # regular expression for extracting the password
+                regex = re.compile(r'(\S+)')
+                found = regex.findall(line)
+                for word in found:
+                    password_list.append(word)
+    except:
+        print('File Not Found!')
+        raise FileNotFoundError
+
+    return password_list
 
 
 def main(args):
-    for password in args:
-        count = pwnd_api_check(password)
-        if count:
-            print(f'{password} was found to be leaked {count} times')
+    # iterate through arguements given
+    for arg in args:
+
+        # check if a txt file is given
+        if arg[-4:] == '.txt':
+            try:
+                password_list = password_from_txt_file(arg)
+                for password in password_list:
+                    count = pwnd_api_check(password)
+                    if count:
+                        print(f'{password} was found to be leaked {count} times')
+                    else:
+                        print(f'Great password!! \nThe {password} has been leaked {count} times.')
+            except:
+                raise Exception('Not a valid .txt file for password checking')
+
+        # if not a txt file then password was given as argument
         else:
-            print(f'Great password!! \nThe {password} has been leaked {count} times.')
+            password = arg
+            count = pwnd_api_check(password)
+            if count:
+                print(f'{password} was found to be leaked {count} times')
+            else:
+                print(f'Great password!! \nThe {password} has been leaked {count} times.')
     return 'done!'
 
 if __name__ == '__main__':
