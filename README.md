@@ -3,7 +3,7 @@ This is a repo for the projects in the Zero-To-Mastery Python Developer course
 
 
 ### Password Checker
-The password_checker.py file will check whether a password has ever been leaked. It does this by checking the SHA1 hash of the given password against the SHA1 hash of passwords leaked as stated from the API https://api.pwnedpasswords.com/range/
+The **password_checker.py** file will check whether a password has ever been leaked. It does this by checking the SHA1 hash of the given password against the SHA1 hash of passwords leaked as stated from the API https://api.pwnedpasswords.com/range/
 
 To use the program:
 
@@ -13,12 +13,12 @@ To use the program:
 
 **Examples**
 
-$python password_checker.py password123
+$ python password_checker.py password123
 
 password123 was found to be leaked 248071 times
 done!
 
-$python password_checker.py my_passwords.txt
+$ python password_checker.py my_passwords.txt
 
 cars12345 was found to be leaked 1134 times
 password123 was found to be leaked 248071 times
