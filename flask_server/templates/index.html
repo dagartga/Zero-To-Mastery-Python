@@ -2,10 +2,11 @@
 <html>
 <head>
   <title>MY WEBSITE</title>
-  <link rel='stylesheet' type="text/css" href="style.css">
-</head>
+  <link rel='stylesheet' type="text/css" href="static/style.css">
+  <link rel="shortcut icon" href="{{url_for('static', filename='SunglassesSmiley.ico')}}">
 <body>
-  I AM A WEBMASTER
-  <script src='script.js'></script>
+  {{name}}
+  {{post_id}}
+  <script src='static/script.js'></script>
 </body>
 </html>
