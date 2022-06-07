@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
+import csv
 app = Flask(__name__)
 
 @app.route('/')
@@ -31,11 +32,31 @@ def write_to_file(data):
         file = db.write(f'\n{email},{subject},{message}')
 
 
+def write_to_csv(data):
+    '''
+        Takes in json data and writes the values to a csv file
+
+        input json example:
+        {'email': 'blank@nomail.com', 'subject': 'testing', 'message': 'the message is'}
+
+        txt output:
+        'blank@nomail.com','testing','this message is'
+
+    '''
+    with open('./database.csv', newline='', mode='a') as db2:
+        email = data['email']
+        subject = data['subject']
+        message = data['message']
+        # append the data to the database.txt file
+        csv_writer = csv.writer(db2, delimiter=',', quotechar='"')
+        csv_writer.writerow([email, subject, message])
+
+
 @app.route('/submit_form', methods=['POST', 'GET'])
 def submit_form():
     if request.method == 'POST':
         data = request.form.to_dict()
-        write_to_file(data)
+        write_to_csv(data)
         return redirect('thankyou.html')
 
     else:
